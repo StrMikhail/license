@@ -1,0 +1,36 @@
+:root{
+    --clr-main: hsl(194, 96%, 30%);
+    --link-color-h: 194;
+    --link-color-s: 96%;
+    --link-color-l: 30%;
+
+    --clr-main-dark: hsl(var(--link-color-h), var(--link-color-s), calc(var(--link-color-l) * .5));
+}
+
+
+*{
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+body::after {
+    content: ' ';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url('../assets/img/Map.png');
+    background-color: var(--clr-main);
+    background-color: var(--clr-main-dark);
+    background-size:cover;
+    background-position:center;
+    z-index: -1;
+}
+
+.logo{
+    fill: white;
+    width:100%;
+    height: 5rem;
+}

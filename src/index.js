@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import ru_RU from 'antd/lib/locale/ru_RU';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import './style.css';
+import './styles/import.css';
 import App from './App';
 import { ConfigProvider } from 'antd';
 

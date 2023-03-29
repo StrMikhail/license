@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Form, Input, Typography, DatePicker, Button, Upload, Select } from 'antd';
-import { ReactComponent as Logo } from '../assets/svg/logo.svg';
-import DownloadLink from 'react-download-link';
-import brest from '../assets/img/astra.png';
-import bit from '../assets/img/bit.png';
+import React, { useState } from 'react';
+import { Form, Input, Typography, DatePicker, Button, Upload, Select, Card } from 'antd';
+import Success from './Success';
+import { transformDate } from '../utils/transformDate';
 
 const formItemLayout = {
     labelCol: {
         xs: {
-            span: 24,
+            span: 20,
         },
         sm: {
-            span: 6,
+            span: 7,
+            offset: 0,
         },
     },
 };
@@ -23,19 +22,11 @@ const tailFormItemLayout = {
     },
 };
 
-const LicenseForm = () => {
+const LicenseForm = ({ onError, onSuccess }) => {
     const [form] = Form.useForm();
-    const [isDownload, setDownload] = useState(false);
-    const [counter, setCounter] = useState(0);
-
-    console.log(counter);
-    // useEffect(() => {
-
-    //     console.log(counter);
-    // }, counter);
 
     const getLicense = async (settings) => {
-        await fetch(process.env.REACT_APP_BACKEND_AP, {
+        await fetch(process.env.REACT_APP_BACKEND_API, {
             method: 'POST',
             body: JSON.stringify(settings),
             headers: {
@@ -51,16 +42,11 @@ const LicenseForm = () => {
                 document.body.appendChild(link);
                 link.click();
                 link.parentNode.removeChild(link);
+                onSuccess(true);
             })
-            .then(() => setDownload(true));
+            .catch((error) => onError(error));
     };
 
-    const transformDate = (date) => {
-        const D = date.$D + 1 < 10 ? `0${date.$D}` : date.$D;
-        const M = date.$M + 1 < 10 ? `0${date.$M + 1}` : date.$M + 1;
-        const Y = date.$y;
-        return `${D}/${M}/${Y}`;
-    };
     const validateDate = (date) => {
         const today = new Date();
         const licenseDate = new Date(transformDate(date).split('/').reverse());
@@ -73,155 +59,136 @@ const LicenseForm = () => {
         getLicense({ ...values, edate: date });
     };
 
-    const onSelect = (value) => {
-        if (value.length && /^([aA-zZ0-9]{8})$/.test(value[value.length - 1])) {
-            form.setFieldValue('hwid', (value.error = 'asdasd'));
-            return form.setFieldValue(
+    const isValideSelect = (value) => {
+        return /^([aA-zZ0-9]{8})$/.test(value);
+    };
+
+    const validateSelect = (value) => {
+        const fullArr = [...value];
+
+        const lastEl = value.pop().toUpperCase();
+
+        if (!isValideSelect(lastEl)) {
+            form.setFieldValue(
                 'hwid',
-                value.map((item) => item.toUpperCase()),
+                value.map((i) => i.toUpperCase()),
+            );
+            return true;
+        }
+        if (value.includes(lastEl)) {
+            form.setFieldValue(
+                'hwid',
+                value.map((i) => i.toUpperCase()),
+            );
+        } else {
+            form.setFieldValue(
+                'hwid',
+                fullArr.map((i) => i.toUpperCase()),
             );
         }
-        return value.pop();
+        return true;
     };
     return (
-        <>
-            <>
-                <Logo
-                    className="logo"
-                    onClick={() => counter < 5 && setCounter(counter + 1)}
-                    style={{
-                        transition: '.3s',
-                        transform: `rotate(${counter == 5 ? 180 : 0}deg)`,
-                        opacity: `${counter === 5 ? 0 : 1}`,
-                    }}
-                />
-                {counter === 5 && (
-                    <div
-                        onClick={() => setCounter(0)}
-                        style={{
-                            width: '100%',
-                            height: '200px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}>
-                        <img src={brest} alt="" height={'50%'} />
-                        <img src={bit} alt="" height={'50%'} />
-                    </div>
-                )}
-            </>
-            <div className="license_form">
-                <Form
-                    {...formItemLayout}
-                    style={{ width: '350px' }}
-                    name="form"
-                    requiredMark="optional"
-                    onFinish={handleSubmitForm}
-                    scrollToFirstError
-                    form={form}>
-                    {isDownload ? (
-                        <div>
-                            <Typography.Title level={4} style={{ textAlign: 'center' }}>
-                                Лицензия успешно сгенерирована
-                            </Typography.Title>
-                            <Button
-                                type="primary"
-                                htmlType="submit"
-                                block
-                                onClick={() => setDownload(false)}>
-                                Сгенерировать новую лицензию
-                            </Button>
-                        </div>
-                    ) : (
-                        <>
-                            <Typography.Title level={3}>Продление лицензии</Typography.Title>
+        <Card className="license_form">
+            <Form
+                {...formItemLayout}
+                style={{ width: '350px' }}
+                size="large"
+                name="form"
+                requiredMark="optional"
+                onFinish={handleSubmitForm}
+                scrollToFirstError
+                form={form}>
+                <Typography.Title level={3}>Продление лицензии</Typography.Title>
+                <Form.Item
+                    labelCol={{ span: 9 }}
+                    name="edate"
+                    tooltip={'Минимум 3 месяца'}
+                    label="Продлить до"
+                    hasFeedback
+                    validateFirst="parallel"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Выберите дату',
+                        },
+                        {
+                            validator(_, value) {
+                                if (value && validateDate(value)) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject('Не менее 3 месяцев');
+                            },
+                        },
+                    ]}>
+                    <DatePicker
+                        placeholder="Выберете дату"
+                        format="DD/MM/YYYY"
+                        placement="topRight"
+                        style={{ width: '100%' }}
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="fname"
+                    label="Фамилия"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите фамилию',
+                        },
+                    ]}>
+                    <Input allowClear={true} />
+                </Form.Item>
 
-                            <Form.Item
-                                name="fname"
-                                label="Фамилия"
-                                hasFeedback
-                                normalize={(value) => value.trim()}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Введите фамилию',
-                                    },
-                                ]}>
-                                <Input allowClear={true} />
-                            </Form.Item>
+                <Form.Item
+                    name="lname"
+                    label="Имя"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите имя',
+                        },
+                    ]}>
+                    <Input allowClear={true} />
+                </Form.Item>
 
-                            <Form.Item
-                                name="lname"
-                                label="Имя"
-                                hasFeedback
-                                normalize={(value) => value.trim()}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Введите имя',
-                                    },
-                                ]}>
-                                <Input allowClear={true} />
-                            </Form.Item>
+                <Form.Item
+                    name="hwid"
+                    label="hwid"
+                    tooltip={'8 символов'}
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите hwid',
+                        },
+                        {
+                            validator: (_, value) => {
+                                if (value && validateSelect(value)) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject();
+                            },
+                        },
+                    ]}>
+                    <Select
+                        mode="tags"
+                        value={'string[]'}
+                        maxTagTextLength={3}
+                        maxTagCount={2}
+                        optionFilterProp="value"
+                    />
+                </Form.Item>
 
-                            <Form.Item
-                                name="hwid"
-                                label="hwid"
-                                hasFeedback
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Введите hwid',
-                                    },
-                                ]}>
-                                <Select
-                                    mode="tags"
-                                    value="string"
-                                    maxTagTextLength={8}
-                                    onChange={onSelect}
-                                    style={{ width: '100%' }}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                labelCol={{ span: 25 }}
-                                name="edate"
-                                tooltip={'Минимум 3 месяца'}
-                                label="Продлить до"
-                                hasFeedback
-                                validateFirst="parallel"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Выберите дату',
-                                    },
-                                    {
-                                        validator(_, value) {
-                                            if (value && validateDate(value)) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(
-                                                'Продлить лицензию можно минимум на 3 месяца',
-                                            );
-                                        },
-                                    },
-                                ]}>
-                                <DatePicker
-                                    placeholder="Выберете дату"
-                                    format="DD/MM/YYYY"
-                                    style={{ width: '100%' }}
-                                />
-                            </Form.Item>
-                            <Form.Item {...tailFormItemLayout} required>
-                                <Button type="primary" htmlType="submit" block>
-                                    Сгенерировать лицензию
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form>
-            </div>
-        </>
+                <Form.Item {...tailFormItemLayout} required>
+                    <Button type="primary" htmlType="submit" block>
+                        Сгенерировать лицензию
+                    </Button>
+                </Form.Item>
+            </Form>
+        </Card>
     );
 };
 
