@@ -73,7 +73,8 @@ const LicenseForm = ({ onError, onSuccess }) => {
                 'hwid',
                 value.map((i) => i.toUpperCase()),
             );
-            return true;
+            return value.length === 0 ? false : true;
+
         }
         if (value.includes(lastEl)) {
             form.setFieldValue(
