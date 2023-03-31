@@ -1,0 +1,46 @@
+
+
+.main{
+    height: 100vh;
+    
+    display: grid;
+    grid-template-rows: minmax(auto, 200px) 1fr;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    height: 100%;
+}
+
+.logo {
+    width: 300px;
+}
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -15vh;
+    height: 100%;
+}
+
+.adm {
+    position: fixed;
+    right: 1vw;
+    bottom: 1vw;
+    color: var( --clr-main-dark);
+
+    height: 20px;
+    width: 20px;
+    transition: .3s;
+}
+
+.adm:hover {
+    color: white
+}
+
+

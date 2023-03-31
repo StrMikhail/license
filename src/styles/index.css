@@ -1,0 +1,38 @@
+
+
+@font-face {
+    font-family: "Akrobat";
+    src: url("../assets/font/Akrobat-Bold.woff") format('woff');
+}
+  
+
+
+
+html,body{
+    overflow: hidden;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Akrobat" !important;
+}
+.app{
+    height: 100vh;
+}
+body::after {
+    content: ' ';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url('../assets/img/Map.png');
+    background-color: var(--clr-main);
+    background-color: var(--clr-main-dark);
+    background-size:cover;
+    background-position:center;
+    z-index: -1;
+}
+

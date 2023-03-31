@@ -1,23 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import ru_RU from 'antd/lib/locale/ru_RU';
-import dayjs from 'dayjs';
-import 'dayjs/locale/ru';
-import './styles/import.css';
-import App from './App';
-import { ConfigProvider } from 'antd';
 
-dayjs.locale('ru');
+import 'dayjs/locale/ru';
+
+import './styles/import.css';
+
+import App from './App';
+import Provider from './hoc/Provider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <ConfigProvider
-        locale={ru_RU}
-        theme={{
-            token: {
-                colorPrimary: '#037394',
-            },
-        }}>
+    <Provider>
         <App />
-    </ConfigProvider>,
+    </Provider>,
 );

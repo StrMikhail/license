@@ -1,0 +1,12 @@
+:root{
+
+    --link-color-h: 194;
+    --link-color-s: 96%;
+    --link-color-l: 30%;
+
+
+    --clr-main: hsl(194, 96%, 30%);
+    --clr-main-dark: hsl(var(--link-color-h), var(--link-color-s), calc(var(--link-color-l) * .5));
+
+    --header-height: 20%;
+}

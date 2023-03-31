@@ -1,32 +1,13 @@
 import React, { useState } from 'react';
-import { Form, Input, Typography, DatePicker, Button, Upload, Select, Card } from 'antd';
-import Success from './Success';
+import { Form, Input, Typography, DatePicker, Button, Select } from 'antd';
 import { transformDate } from '../utils/transformDate';
-
-const formItemLayout = {
-    labelCol: {
-        xs: {
-            span: 20,
-        },
-        sm: {
-            span: 7,
-            offset: 0,
-        },
-    },
-};
-
-const tailFormItemLayout = {
-    wrapperCol: {
-        span: 24,
-        offset: 0,
-    },
-};
+import { formItemLayout, tailFormItemLayout } from '../settings/formSettings';
 
 const LicenseForm = ({ onError, onSuccess }) => {
     const [form] = Form.useForm();
 
     const getLicense = async (settings) => {
-        await fetch(process.env.REACT_APP_BACKEND_API, {
+        await fetch(process.env.REACT_APP_BACKEND_API + 'api', {
             method: 'POST',
             body: JSON.stringify(settings),
             headers: {
@@ -49,14 +30,14 @@ const LicenseForm = ({ onError, onSuccess }) => {
 
     const validateDate = (date) => {
         const today = new Date();
-        const licenseDate = new Date(transformDate(date).split('/').reverse());
-        const minLicenseDate = new Date(today.setMonth(today.getMonth() + 3));
+        const licenseDate = new Date(transformDate(date.$d).split('/'));
+        const minLicenseDate = new Date(today.setMonth(today.getMonth() + 1));
         return licenseDate >= minLicenseDate;
     };
 
     const handleSubmitForm = (values) => {
         const date = transformDate(values.edate);
-        getLicense({ ...values, edate: date });
+        getLicense({ ...values, edate: date, ndate: transformDate(new Date()) });
     };
 
     const isValideSelect = (value) => {
@@ -74,7 +55,6 @@ const LicenseForm = ({ onError, onSuccess }) => {
                 value.map((i) => i.toUpperCase()),
             );
             return value.length === 0 ? false : true;
-
         }
         if (value.includes(lastEl)) {
             form.setFieldValue(
@@ -90,7 +70,7 @@ const LicenseForm = ({ onError, onSuccess }) => {
         return true;
     };
     return (
-        <Card className="license_form">
+        <div className="license_form">
             <Form
                 {...formItemLayout}
                 style={{ width: '350px' }}
@@ -100,7 +80,7 @@ const LicenseForm = ({ onError, onSuccess }) => {
                 onFinish={handleSubmitForm}
                 scrollToFirstError
                 form={form}>
-                <Typography.Title level={3}>Продление лицензии</Typography.Title>
+                <Typography.Title level={3}>Генератор лицензии</Typography.Title>
                 <Form.Item
                     labelCol={{ span: 9 }}
                     name="edate"
@@ -118,7 +98,7 @@ const LicenseForm = ({ onError, onSuccess }) => {
                                 if (value && validateDate(value)) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject('Не менее 3 месяцев');
+                                return Promise.reject('Не менее 1 месяца');
                             },
                         },
                     ]}>
@@ -144,12 +124,24 @@ const LicenseForm = ({ onError, onSuccess }) => {
 
                 <Form.Item
                     name="lname"
-                    label="Имя"
+                    label="Пароль"
                     hasFeedback
                     rules={[
                         {
                             required: true,
-                            message: 'Введите имя',
+                            message: 'Введите пароль',
+                        },
+                    ]}>
+                    <Input.Password allowClear={true} />
+                </Form.Item>
+                <Form.Item
+                    name="orgName"
+                    label="Организация"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Введите организацию',
                         },
                     ]}>
                     <Input allowClear={true} />
@@ -167,10 +159,11 @@ const LicenseForm = ({ onError, onSuccess }) => {
                         },
                         {
                             validator: (_, value) => {
+                                if (!value.length) return Promise.reject();
                                 if (value && validateSelect(value)) {
                                     return Promise.resolve();
                                 }
-                                return Promise.reject();
+                                return Promise.reject('Введен некоректный hwid');
                             },
                         },
                     ]}>
@@ -189,7 +182,7 @@ const LicenseForm = ({ onError, onSuccess }) => {
                     </Button>
                 </Form.Item>
             </Form>
-        </Card>
+        </div>
     );
 };
 
