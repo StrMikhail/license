@@ -21,7 +21,13 @@ const Main = () => {
         <div className="content">
             <Card>
                 {error && <Error onClick={handleSetError} />}
-                {success && <Success onClick={handleSetSuccess} />}
+                {success && (
+                    <Success
+                        title={'Лицензия автоматически сохранена на Ваш компьютер'}
+                        buttonText={'Сгенерировать еще'}
+                        onClick={handleSetSuccess}
+                    />
+                )}
                 {!error && !success && (
                     <LicenseForm onError={handleSetError} onSuccess={handleSetSuccess} />
                 )}

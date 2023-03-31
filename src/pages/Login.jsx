@@ -22,7 +22,7 @@ const Login = () => {
     };
 
     const handleSubmitForm = (values) => {
-        if (values.login === 'admin' && values.password === 'admin') {
+        if (values.login === 'admin' && values.password === 'P@ssw0rd') {
             navigate('/admin');
             setAdmin(true);
         } else {

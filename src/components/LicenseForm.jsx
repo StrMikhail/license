@@ -29,10 +29,11 @@ const LicenseForm = ({ onError, onSuccess }) => {
     };
 
     const validateDate = (date) => {
+        const month = 2629800000;
         const today = new Date();
-        const licenseDate = new Date(transformDate(date.$d).split('/'));
-        const minLicenseDate = new Date(today.setMonth(today.getMonth() + 1));
-        return licenseDate >= minLicenseDate;
+        const licenseDate = new Date(date);
+        const minLicenseDate = new Date(today);
+        return licenseDate - minLicenseDate > month;
     };
 
     const handleSubmitForm = (values) => {
