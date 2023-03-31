@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Row, Typography } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminProvider } from '../hoc/Provider';
@@ -35,11 +35,11 @@ const Login = () => {
     };
 
     return (
-        <Row aligh="center" justify="center">
+        <div className="content">
             <Card>
                 <Form
                     {...formItemLayout}
-                    style={{ width: '350px' }}
+                    // style={{ width: '350px' }}
                     size="large"
                     name="form"
                     requiredMark="optional"
@@ -78,7 +78,7 @@ const Login = () => {
                     </Form.Item>
                 </Form>
             </Card>
-        </Row>
+        </div>
     );
 };
 

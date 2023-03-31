@@ -90,7 +90,7 @@ const Admin = () => {
     };
 
     return (
-        <Layout style={{ backgroundColor: 'transparent', height: '100vh' }}>
+        <Layout style={{ backgroundColor: 'transparent', height: '100%' }}>
             <Header style={{ height: 'auto', backgroundColor: 'transparent' }}>
                 <Row align="middle" justify="start">
                     <Col flex={1} push={0}>
@@ -124,7 +124,7 @@ const Admin = () => {
             <Content
                 align="middle"
                 style={{
-                    minHeight: '100vh',
+                    minHeight: '100%',
                     display: 'flex',
                     justifyContent: 'center',
                 }}>

@@ -17,7 +17,7 @@ const LayoutComp = () => {
                 }}>
                 <HeaderLogo />
             </Header>
-            <Content>
+            <Content style={{ height: '75vh' }}>
                 <Outlet />
             </Content>
         </Layout>

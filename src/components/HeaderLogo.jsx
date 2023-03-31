@@ -15,7 +15,7 @@ const HeaderLogo = () => {
             <Logo
                 className="logo_svg"
                 style={{
-                    width: '100%',
+                    width: localtion.pathname === '/admin' ? 'auto' : '300px',
                     height: '100%',
                 }}
                 onClick={() => (counter < 5 ? setCounter(counter + 1) : setCounter(0))}

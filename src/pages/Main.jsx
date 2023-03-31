@@ -4,7 +4,7 @@ import LicenseForm from '../components/LicenseForm';
 import { ReactComponent as Toogle } from '../assets/svg/Toogle.svg';
 import { Link } from 'react-router-dom';
 import Success from '../components/Success';
-import { Card } from 'antd';
+import { Card, Row } from 'antd';
 
 const Main = () => {
     const [error, setError] = useState(false);

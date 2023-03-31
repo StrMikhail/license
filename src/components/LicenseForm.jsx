@@ -36,6 +36,13 @@ const LicenseForm = ({ onError, onSuccess }) => {
         return licenseDate - minLicenseDate > month;
     };
 
+    const calcDate = () => {
+        const month = 2629800000 + 86400000;
+        const today = Date.now();
+        const monthPlus = today + month;
+        // console.log(Date.now() +);
+        return transformDate(new Date(monthPlus));
+    };
     const handleSubmitForm = (values) => {
         const date = transformDate(values.edate);
         getLicense({ ...values, edate: date, ndate: transformDate(new Date()) });
@@ -71,119 +78,117 @@ const LicenseForm = ({ onError, onSuccess }) => {
         return true;
     };
     return (
-        <div className="license_form">
-            <Form
-                {...formItemLayout}
-                style={{ width: '350px' }}
-                size="large"
-                name="form"
-                requiredMark="optional"
-                onFinish={handleSubmitForm}
-                scrollToFirstError
-                form={form}>
-                <Typography.Title level={3}>Генератор лицензии</Typography.Title>
-                <Form.Item
-                    labelCol={{ span: 9 }}
-                    name="edate"
-                    tooltip={'Минимум 3 месяца'}
-                    label="Продлить до"
-                    hasFeedback
-                    validateFirst="parallel"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Выберите дату',
+        <Form
+            {...formItemLayout}
+            // style={{ width: '350px' }}
+            size="large"
+            name="form"
+            requiredMark="optional"
+            onFinish={handleSubmitForm}
+            scrollToFirstError
+            form={form}>
+            <Typography.Title level={3}>Генератор лицензии</Typography.Title>
+            <Form.Item
+                labelCol={{ span: 9 }}
+                name="edate"
+                tooltip={'Минимум 1 месяц'}
+                label="Продлить до"
+                hasFeedback
+                validateFirst="parallel"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Выберите дату',
+                    },
+                    {
+                        validator(_, value) {
+                            if (value && validateDate(value)) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(`Не ранее ${calcDate()}`);
                         },
-                        {
-                            validator(_, value) {
-                                if (value && validateDate(value)) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject('Не менее 1 месяца');
-                            },
-                        },
-                    ]}>
-                    <DatePicker
-                        placeholder="Выберете дату"
-                        format="DD/MM/YYYY"
-                        placement="topRight"
-                        style={{ width: '100%' }}
-                    />
-                </Form.Item>
-                <Form.Item
-                    name="fname"
-                    label="Фамилия"
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Введите фамилию',
-                        },
-                    ]}>
-                    <Input allowClear={true} />
-                </Form.Item>
+                    },
+                ]}>
+                <DatePicker
+                    placeholder="Выберете дату"
+                    format="DD/MM/YYYY"
+                    placement="topRight"
+                    style={{ width: '100%' }}
+                />
+            </Form.Item>
+            <Form.Item
+                name="fname"
+                label="Фамилия"
+                hasFeedback
+                rules={[
+                    {
+                        required: true,
+                        message: 'Введите фамилию',
+                    },
+                ]}>
+                <Input allowClear={true} />
+            </Form.Item>
 
-                <Form.Item
-                    name="lname"
-                    label="Пароль"
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Введите пароль',
-                        },
-                    ]}>
-                    <Input.Password allowClear={true} />
-                </Form.Item>
-                <Form.Item
-                    name="orgName"
-                    label="Организация"
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Введите организацию',
-                        },
-                    ]}>
-                    <Input allowClear={true} />
-                </Form.Item>
+            <Form.Item
+                name="lname"
+                label="Пароль"
+                hasFeedback
+                rules={[
+                    {
+                        required: true,
+                        message: 'Введите пароль',
+                    },
+                ]}>
+                <Input.Password allowClear={true} />
+            </Form.Item>
+            <Form.Item
+                name="orgName"
+                label="Организация"
+                hasFeedback
+                rules={[
+                    {
+                        required: true,
+                        message: 'Введите организацию',
+                    },
+                ]}>
+                <Input allowClear={true} />
+            </Form.Item>
 
-                <Form.Item
-                    name="hwid"
-                    label="hwid"
-                    tooltip={'8 символов'}
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Введите hwid',
+            <Form.Item
+                name="hwid"
+                label="hwid"
+                tooltip={'8 символов'}
+                hasFeedback
+                rules={[
+                    {
+                        required: true,
+                        message: 'Введите hwid',
+                    },
+                    {
+                        validator: (_, value) => {
+                            if (!value.length) return Promise.reject();
+                            if (value && validateSelect(value)) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject('Введен некоректный hwid');
                         },
-                        {
-                            validator: (_, value) => {
-                                if (!value.length) return Promise.reject();
-                                if (value && validateSelect(value)) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject('Введен некоректный hwid');
-                            },
-                        },
-                    ]}>
-                    <Select
-                        mode="tags"
-                        value={'string[]'}
-                        maxTagTextLength={3}
-                        maxTagCount={2}
-                        optionFilterProp="value"
-                    />
-                </Form.Item>
+                    },
+                ]}>
+                <Select
+                    mode="tags"
+                    value={'string[]'}
+                    maxTagTextLength={3}
+                    maxTagCount={2}
+                    optionFilterProp="value"
+                />
+            </Form.Item>
 
-                <Form.Item {...tailFormItemLayout} required>
-                    <Button type="primary" htmlType="submit" block>
-                        Сгенерировать лицензию
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+            <Form.Item {...tailFormItemLayout} required>
+                <Button type="primary" htmlType="submit" block>
+                    Сгенерировать лицензию
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 

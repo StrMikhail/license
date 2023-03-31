@@ -1,3 +1,4 @@
+@import './variables.css';
 
 
 @font-face {
@@ -9,7 +10,7 @@
 
 
 html,body{
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 *{
@@ -35,4 +36,30 @@ body::after {
     background-position:center;
     z-index: -1;
 }
+.content {
+    display: flex;
+    margin-top: 10vh;
+    align-items: start;
+    justify-content: center;
+}
+
+.logo_svg{
+    fill: white;
+}
+
+.adm {
+    position: fixed;
+    right: 1vw;
+    bottom: 1vw;
+    color: var( --clr-main-dark);
+
+    height: 20px;
+    width: 20px;
+    transition: .3s;
+}
+
+.adm:hover {
+    color: white
+}
+
 
