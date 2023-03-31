@@ -90,10 +90,10 @@ const Admin = () => {
     };
 
     return (
-        <Layout style={{ backgroundColor: 'transparent' }}>
-            <Header style={{ height: '100%', backgroundColor: 'transparent' }}>
+        <Layout style={{ backgroundColor: 'transparent', height: '100vh' }}>
+            <Header style={{ height: 'auto', backgroundColor: 'transparent' }}>
                 <Row align="middle" justify="start">
-                    <Col flex={1} push={1}>
+                    <Col flex={1} push={0}>
                         <Row align="bottom" justify="start" style={{ marginTop: '20px' }}>
                             <HeaderLogo />
                         </Row>
@@ -124,11 +124,11 @@ const Admin = () => {
             <Content
                 align="middle"
                 style={{
-                    height: '100vh',
+                    minHeight: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                 }}>
-                <Row align="stretch" justify="center" style={{ width: '95%' }}>
+                <Row justify="center" style={{ width: '95%', height: '100%' }}>
                     <TablePanel data={data} loading={loading} />
                 </Row>
             </Content>

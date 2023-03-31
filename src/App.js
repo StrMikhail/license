@@ -4,14 +4,14 @@ import Main from './pages/Main';
 import Admin from './pages/Admin';
 import RequireAuth from './hoc/RequireAuth';
 import Login from './pages/Login';
-import Layout from './components/Layout';
+import LayoutComp from './components/LayoutComp';
 
 moment.locale('ru');
 function App() {
     return (
         <div className="app">
             <Routes>
-                <Route path="/" element={<Layout />}>
+                <Route path="/" element={<LayoutComp />}>
                     <Route path="/" element={<Main />} />
                     <Route path="/login" element={<Login />} />
                 </Route>

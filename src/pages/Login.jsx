@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Typography } from 'antd';
+import { Button, Card, Form, Input, Row, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminProvider } from '../hoc/Provider';
@@ -35,48 +35,50 @@ const Login = () => {
     };
 
     return (
-        <Card>
-            <Form
-                {...formItemLayout}
-                style={{ width: '350px' }}
-                size="large"
-                name="form"
-                requiredMark="optional"
-                onFinish={handleSubmitForm}
-                scrollToFirstError
-                form={form}>
-                <Typography.Title level={3}>Автоизация</Typography.Title>
-                <Form.Item
-                    name="login"
-                    label="Логин"
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Кто ты, путник?',
-                        },
-                    ]}>
-                    <Input allowClear={true} />
-                </Form.Item>
-                <Form.Item
-                    name="password"
-                    label="Пароль"
-                    hasFeedback
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Напиши кодовое слово',
-                        },
-                    ]}>
-                    <Input.Password allowClear={true} />
-                </Form.Item>
-                <Form.Item {...tailFormItemLayout} required>
-                    <Button type="primary" htmlType="submit" block>
-                        Пройти проверку на властелина
-                    </Button>
-                </Form.Item>
-            </Form>
-        </Card>
+        <Row aligh="center" justify="center">
+            <Card>
+                <Form
+                    {...formItemLayout}
+                    style={{ width: '350px' }}
+                    size="large"
+                    name="form"
+                    requiredMark="optional"
+                    onFinish={handleSubmitForm}
+                    scrollToFirstError
+                    form={form}>
+                    <Typography.Title level={3}>Автоизация</Typography.Title>
+                    <Form.Item
+                        name="login"
+                        label="Логин"
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Кто ты, путник?',
+                            },
+                        ]}>
+                        <Input allowClear={true} />
+                    </Form.Item>
+                    <Form.Item
+                        name="password"
+                        label="Пароль"
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Напиши кодовое слово',
+                            },
+                        ]}>
+                        <Input.Password allowClear={true} />
+                    </Form.Item>
+                    <Form.Item {...tailFormItemLayout} required>
+                        <Button type="primary" htmlType="submit" block>
+                            Пройти проверку на властелина
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+        </Row>
     );
 };
 
