@@ -4,6 +4,7 @@ import HeaderLogo from '../components/HeaderLogo';
 import { Button, Col, Layout, Row, Space } from 'antd';
 import ModalComp from '../components/ModalComp';
 import { Content, Header } from 'antd/es/layout/layout';
+import { downloadFile } from '../utils/downloadFile';
 
 const Admin = () => {
     const [data, setData] = useState();
@@ -14,7 +15,6 @@ const Admin = () => {
 
     useEffect(() => {
         fetchData();
-        setLoading(false);
     }, []);
 
     const addKeyToArray = (array) => {
@@ -40,69 +40,60 @@ const Admin = () => {
     };
 
     const fetchData = async () => {
-        await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
-            method: 'GET',
-            body: JSON.stringify(),
-            headers: {
-                'Content-Type': 'application/json; application/csv',
-            },
-        })
-            .then((response) => {
-                if (response.status > 299) {
-                    throw new Error(response.status);
-                }
-                response.json();
-            })
-            .then((json) => setData(addKeyToArray(json)))
-            .catch((error) => setStatus(typeof error.message === Number ? error.message : 404));
+        setLoading(true);
+        try {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+                method: 'GET',
+                body: JSON.stringify(),
+                headers: {
+                    'Content-Type': 'application/json; application/csv',
+                },
+            });
+            if (response.status > 299) throw new Error(response.status);
+            setStatus(response.status);
+            setData(addKeyToArray(await response.json()));
+            setLoading(false);
+        } catch (error) {
+            setStatus(typeof error.message === Number ? error.message : 404);
+            setLoading(false);
+        }
     };
 
     const addUsetToWhiteList = async (user) => {
-        await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
-            method: 'POST',
-            body: JSON.stringify(user),
-            headers: {
-                'Content-Type': 'application/json; application/csv',
-            },
-        })
-            .then((response) => {
-                if (response.status > 299) {
-                    throw new Error(response.status);
-                }
-                setStatus(201);
-            })
-            .catch((error) => setStatus(typeof error.message === Number ? error.message : 404));
+        try {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+                method: 'POST',
+                body: JSON.stringify(user),
+                headers: {
+                    'Content-Type': 'application/json; application/csv',
+                },
+            });
+            if (response.status > 299) throw new Error(response.status);
+            setStatus(201);
+        } catch (error) {
+            setStatus(typeof error.message === Number ? error.message : 404);
+        }
     };
 
     const getFileCSV = async () => {
-        await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
-            method: 'POST',
-            body: JSON.stringify({ list: 'csv' }),
-            headers: {
-                'Content-Type': 'application/json; application/csv',
-            },
-        })
-            .then((response) => {
-                alert(response);
-                if (response.status > 299) {
-                    throw new Error(response.status);
-                }
-                response.blob();
-            })
-            .then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', `licenses.csv`);
-                document.body.appendChild(link);
-                link.click();
-                link.parentNode.removeChild(link);
-            })
-            .catch((error) => setStatus(typeof error.message === Number ? error.message : 404));
+        try {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+                method: 'POST',
+                body: JSON.stringify({ list: 'csv' }),
+                headers: {
+                    'Content-Type': 'application/json; application/csv',
+                },
+            });
+            if (response.status > 299) throw new Error(response.status);
+            const blob = await response.blob();
+            downloadFile(blob, `licenses.csv`);
+        } catch (error) {
+            setStatus(typeof error.message === Number ? error.message : 404);
+        }
     };
 
     return (
-        <Layout style={{ backgroundColor: 'transparent', height: '100%' }}>
+        <Layout style={{ backgroundColor: 'transparent', height: '400px' }}>
             <Header style={{ height: 'auto', backgroundColor: 'transparent' }}>
                 <Row align="middle" justify="start">
                     <Col flex={1} push={0}>
@@ -118,6 +109,9 @@ const Admin = () => {
                                 </Button>
                                 <Button type="primary" onClick={getFileCSV} size="large" block>
                                     Загрузить список в CSV
+                                </Button>
+                                <Button type="default" onClick={fetchData} size="large" block>
+                                    Обновить таблицу
                                 </Button>
                             </Space>
                         </Row>
@@ -135,7 +129,7 @@ const Admin = () => {
             <Content
                 align="middle"
                 style={{
-                    minHeight: '100%',
+                    // minHeight: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                 }}>

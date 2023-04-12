@@ -19,7 +19,7 @@ const LicenseForm = ({ onSetStatus }) => {
             if (response.status > 299) throw new Error(response.status);
             onSetStatus(response.status);
             const blob = await response.blob();
-            downloadFile(blob);
+            downloadFile(blob, `license.dat`);
         } catch (error) {
             onSetStatus(typeof error.message === Number ? error.message : 404);
         }

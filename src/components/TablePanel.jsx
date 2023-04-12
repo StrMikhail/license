@@ -54,11 +54,12 @@ const TablePanel = ({ data, loading }) => {
 
     return (
         <Table
+            style={{ height: '300px' }}
             columns={tableCols}
             dataSource={data}
             loading={loading}
             pagination={false}
-            scroll={{ y: '100vh' }}
+            scroll={{ y: '70vh' }}
             size="small"
             onChange={handleChange}
         />
