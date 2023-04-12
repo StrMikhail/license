@@ -2,37 +2,27 @@ import React from 'react';
 import { Form, Input, Typography, DatePicker, Button, Select } from 'antd';
 import { transformDate } from '../../utils/transformDate';
 import { formItemLayout, tailFormItemLayout } from '../../settings/formSettings';
+import { downloadFile } from '../../utils/downloadFile';
 
 const LicenseForm = ({ onSetStatus }) => {
     const [form] = Form.useForm();
 
     const getLicense = async (settings) => {
-        await fetch(process.env.REACT_APP_BACKEND_API + 'api', {
-            method: 'POST',
-            body: JSON.stringify(settings),
-            headers: {
-                'Content-Type': 'application/json; application/csv',
-            },
-        })
-            .then((response) => {
-                if (response.status > 299) {
-                    throw new Error(response.status);
-                }
-                response.blob();
-            })
-            .then((blob) => {
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', `license.dat`);
-                document.body.appendChild(link);
-                link.click();
-                link.parentNode.removeChild(link);
-                onSetStatus('license_succes');
-            })
-            .catch((error) => {
-                onSetStatus(typeof error.message === Number ? error.message : 404);
+        try {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'api', {
+                method: 'POST',
+                body: JSON.stringify(settings),
+                headers: {
+                    'Content-Type': 'application/json; application/csv',
+                },
             });
+            if (response.status > 299) throw new Error(response.status);
+            onSetStatus(response.status);
+            const blob = await response.blob();
+            downloadFile(blob);
+        } catch (error) {
+            onSetStatus(typeof error.message === Number ? error.message : 404);
+        }
     };
 
     const validateDate = (date) => {
