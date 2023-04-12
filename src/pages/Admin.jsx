@@ -3,13 +3,12 @@ import TablePanel from '../components/TablePanel';
 import HeaderLogo from '../components/HeaderLogo';
 import { Button, Col, Layout, Row, Space } from 'antd';
 import ModalComp from '../components/ModalComp';
-import { Content, Footer, Header } from 'antd/es/layout/layout';
+import { Content, Header } from 'antd/es/layout/layout';
 
 const Admin = () => {
-    const [error, setError] = useState();
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
-    const [addStatus, setAddStatus] = useState();
+    const [status, setStatus] = useState();
 
     const [openModal, setOpenModal] = useState(false);
 
@@ -33,9 +32,9 @@ const Admin = () => {
     };
 
     const handleClear = () => {
-        setError();
-        setAddStatus();
+        setStatus();
     };
+
     const addNewUser = (data) => {
         addUsetToWhiteList(data);
     };
@@ -48,24 +47,31 @@ const Admin = () => {
                 'Content-Type': 'application/json; application/csv',
             },
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (response.status > 299) {
+                    throw new Error(response.status);
+                }
+                response.json();
+            })
             .then((json) => setData(addKeyToArray(json)))
-            .catch((error) => setError(error.message));
+            .catch((error) => setStatus(typeof error.message === Number ? error.message : 404));
     };
 
     const addUsetToWhiteList = async (user) => {
-        try {
-            await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
-                method: 'POST',
-                body: JSON.stringify(user),
-                headers: {
-                    'Content-Type': 'application/json; application/csv',
-                },
-            });
-            setAddStatus(true);
-        } catch (error) {
-            setError(error);
-        }
+        await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': 'application/json; application/csv',
+            },
+        })
+            .then((response) => {
+                if (response.status > 299) {
+                    throw new Error(response.status);
+                }
+                setStatus(201);
+            })
+            .catch((error) => setStatus(typeof error.message === Number ? error.message : 404));
     };
 
     const getFileCSV = async () => {
@@ -76,7 +82,13 @@ const Admin = () => {
                 'Content-Type': 'application/json; application/csv',
             },
         })
-            .then((response) => response.blob())
+            .then((response) => {
+                alert(response);
+                if (response.status > 299) {
+                    throw new Error(response.status);
+                }
+                response.blob();
+            })
             .then((blob) => {
                 const url = window.URL.createObjectURL(new Blob([blob]));
                 const link = document.createElement('a');
@@ -86,7 +98,7 @@ const Admin = () => {
                 link.click();
                 link.parentNode.removeChild(link);
             })
-            .catch((error) => setError(error));
+            .catch((error) => setStatus(typeof error.message === Number ? error.message : 404));
     };
 
     return (
@@ -105,7 +117,7 @@ const Admin = () => {
                                     Добавить нового пользователя
                                 </Button>
                                 <Button type="primary" onClick={getFileCSV} size="large" block>
-                                    Загрузить CSV
+                                    Загрузить список в CSV
                                 </Button>
                             </Space>
                         </Row>
@@ -116,9 +128,8 @@ const Admin = () => {
                     onSubmit={addNewUser}
                     open={openModal}
                     handleClose={toogleModal}
-                    status={addStatus}
+                    status={status}
                     onClear={handleClear}
-                    error={error}
                 />
             </Header>
             <Content

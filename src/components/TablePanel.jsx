@@ -5,6 +5,7 @@ const TablePanel = ({ data, loading }) => {
     const [sortedInfo, setSortedInfo] = useState({});
 
     const handleChange = (sorter) => {
+        console.log(sorter);
         setSortedInfo(sorter);
     };
 

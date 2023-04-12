@@ -4,7 +4,7 @@ import Main from './pages/Main';
 import Admin from './pages/Admin';
 import RequireAuth from './hoc/RequireAuth';
 import Login from './pages/Login';
-import LayoutComp from './components/LayoutComp';
+import LayoutComp from './components/ui/LayoutComp';
 
 moment.locale('ru');
 function App() {

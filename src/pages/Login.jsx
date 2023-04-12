@@ -1,4 +1,4 @@
-import { Button, Card, Col, Form, Input, Row, Typography } from 'antd';
+import { Button, Card, Form, Input, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminProvider } from '../hoc/Provider';
@@ -39,14 +39,14 @@ const Login = () => {
             <Card>
                 <Form
                     {...formItemLayout}
-                    // style={{ width: '350px' }}
+                    style={{ width: '350px' }}
                     size="large"
                     name="form"
                     requiredMark="optional"
                     onFinish={handleSubmitForm}
                     scrollToFirstError
                     form={form}>
-                    <Typography.Title level={3}>Автоизация</Typography.Title>
+                    <Typography.Title level={3}>Авторизация</Typography.Title>
                     <Form.Item
                         name="login"
                         label="Логин"

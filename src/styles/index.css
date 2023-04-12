@@ -20,7 +20,7 @@ html,body{
     font-family: "Akrobat" !important;
 }
 .app{
-    height: 100vh;
+    height: 100%;
 }
 body::after {
     content: ' ';
@@ -36,13 +36,6 @@ body::after {
     background-position:center;
     z-index: -1;
 }
-.content {
-    display: flex;
-    margin-top: 10vh;
-    align-items: start;
-    justify-content: center;
-}
-
 .logo_svg{
     fill: white;
 }
