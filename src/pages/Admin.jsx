@@ -42,7 +42,7 @@ const Admin = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + '/adm', {
                 method: 'GET',
                 body: JSON.stringify(),
                 headers: {
@@ -54,14 +54,14 @@ const Admin = () => {
             setData(addKeyToArray(await response.json()));
             setLoading(false);
         } catch (error) {
-            setStatus(typeof error.message === Number ? error.message : 404);
+            setStatus(typeof +error.message === 'number' ? error.message : 404);
             setLoading(false);
         }
     };
 
     const addUsetToWhiteList = async (user) => {
         try {
-            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + '/adm', {
                 method: 'POST',
                 body: JSON.stringify(user),
                 headers: {
@@ -71,13 +71,13 @@ const Admin = () => {
             if (response.status > 299) throw new Error(response.status);
             setStatus(201);
         } catch (error) {
-            setStatus(typeof error.message === Number ? error.message : 404);
+            setStatus(typeof +error.message === 'number' ? error.message : 404);
         }
     };
 
     const getFileCSV = async () => {
         try {
-            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'adm', {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + '/adm', {
                 method: 'POST',
                 body: JSON.stringify({ list: 'csv' }),
                 headers: {
@@ -88,34 +88,31 @@ const Admin = () => {
             const blob = await response.blob();
             downloadFile(blob, `licenses.csv`);
         } catch (error) {
-            setStatus(typeof error.message === Number ? error.message : 404);
+            setStatus(typeof +error.message === 'number' ? error.message : 404);
         }
     };
 
     return (
-        <Layout style={{ backgroundColor: 'transparent', height: '400px' }}>
-            <Header style={{ height: 'auto', backgroundColor: 'transparent' }}>
-                <Row align="middle" justify="start">
-                    <Col flex={1} push={0}>
-                        <Row align="bottom" justify="start" style={{ marginTop: '20px' }}>
-                            <HeaderLogo />
-                        </Row>
-                    </Col>
-                    <Col>
-                        <Row align="middle" justify="end">
-                            <Space wrap={true} align="center" size={'small'}>
-                                <Button type="primary" onClick={toogleModal} size="large" block>
-                                    Добавить нового пользователя
-                                </Button>
-                                <Button type="primary" onClick={getFileCSV} size="large" block>
-                                    Загрузить список в CSV
-                                </Button>
-                                <Button type="default" onClick={fetchData} size="large" block>
-                                    Обновить таблицу
-                                </Button>
-                            </Space>
-                        </Row>
-                    </Col>
+        <Layout style={{ backgroundColor: 'transparent', height: '100vh' }}>
+            <Header
+                style={{
+                    height: 'var(--header_height)',
+                    backgroundColor: 'transparent',
+                    padding: '10px 20px',
+                }}>
+                <Row justify="space-between" align="middle">
+                    <HeaderLogo />
+                    <Space wrap={true}>
+                        <Button type="primary" onClick={toogleModal}>
+                            Добавить нового пользователя
+                        </Button>
+                        <Button type="primary" onClick={getFileCSV}>
+                            Загрузить список в CSV
+                        </Button>
+                        <Button type="default" onClick={fetchData}>
+                            Обновить таблицу
+                        </Button>
+                    </Space>
                 </Row>
 
                 <ModalComp
@@ -127,9 +124,7 @@ const Admin = () => {
                 />
             </Header>
             <Content
-                align="middle"
                 style={{
-                    // minHeight: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                 }}>

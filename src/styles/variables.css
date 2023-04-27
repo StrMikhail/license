@@ -7,6 +7,8 @@
 
     --clr-main: hsl(194, 96%, 30%);
     --clr-main-dark: hsl(var(--link-color-h), var(--link-color-s), calc(var(--link-color-l) * .5));
+    --clr-main-light: hsl(var(--link-color-h), var(--link-color-s), calc(var(--link-color-l) * 2.1));
 
-    --header-height: 20%;
+
+    --header-height: 80px;
 }

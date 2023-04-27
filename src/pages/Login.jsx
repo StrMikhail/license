@@ -1,13 +1,13 @@
 import { Button, Card, Form, Input, Typography } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminProvider } from '../hoc/Provider';
-import { formItemLayout, tailFormItemLayout } from '../settings/formSettings';
+import LoginForm from '../components/forms/LoginForm';
 
 const Login = () => {
-    const [form] = Form.useForm();
     const navigate = useNavigate();
     const { setAdmin } = React.useContext(AdminProvider);
+    const [error, setError] = useState([]);
 
     const checkAdmin = async (data) => {
         await fetch(process.env.REACT_APP_BACKEND_API, {
@@ -26,9 +26,9 @@ const Login = () => {
             navigate('/admin');
             setAdmin(true);
         } else {
-            form.setFields([
-                { name: 'password', errors: ['Ты не мой властелин! Кыш отсюда!'] },
+            setError([
                 { name: 'login', errors: ['Ты не мой властелин! Кыш отсюда!'] },
+                { name: 'password', errors: [''] },
             ]);
             setAdmin(false);
         }
@@ -37,46 +37,7 @@ const Login = () => {
     return (
         <div className="content">
             <Card>
-                <Form
-                    {...formItemLayout}
-                    style={{ width: '350px' }}
-                    size="large"
-                    name="form"
-                    requiredMark="optional"
-                    onFinish={handleSubmitForm}
-                    scrollToFirstError
-                    form={form}>
-                    <Typography.Title level={3}>Авторизация</Typography.Title>
-                    <Form.Item
-                        name="login"
-                        label="Логин"
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Кто ты, путник?',
-                            },
-                        ]}>
-                        <Input allowClear={true} />
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        label="Пароль"
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Напиши кодовое слово',
-                            },
-                        ]}>
-                        <Input.Password allowClear={true} />
-                    </Form.Item>
-                    <Form.Item {...tailFormItemLayout} required>
-                        <Button type="primary" htmlType="submit" block>
-                            Пройти проверку на властелина
-                        </Button>
-                    </Form.Item>
-                </Form>
+                <LoginForm handleFinish={handleSubmitForm} error={error} />
             </Card>
         </div>
     );

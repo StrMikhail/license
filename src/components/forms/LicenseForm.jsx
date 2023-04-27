@@ -9,19 +9,21 @@ const LicenseForm = ({ onSetStatus }) => {
 
     const getLicense = async (settings) => {
         try {
-            const response = await fetch(process.env.REACT_APP_BACKEND_API + 'api', {
+            const response = await fetch(process.env.REACT_APP_BACKEND_API + '/api', {
                 method: 'POST',
                 body: JSON.stringify(settings),
                 headers: {
                     'Content-Type': 'application/json; application/csv',
                 },
             });
-            if (response.status > 299) throw new Error(response.status);
+            console.log(response);
+
+            if (response.status > 399) throw new Error(response.status);
             onSetStatus(response.status);
             const blob = await response.blob();
             downloadFile(blob, `license.dat`);
         } catch (error) {
-            onSetStatus(typeof error.message === Number ? error.message : 404);
+            onSetStatus(typeof +error.message === 'number' ? error.message : 404);
         }
     };
 

@@ -1,32 +1,24 @@
 import { Layout } from 'antd';
-import { Content, Header } from 'antd/es/layout/layout';
-import React, { useState } from 'react';
+import { Content } from 'antd/es/layout/layout';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
-import HeaderLogo from '../HeaderLogo';
+
+import HeaderComponent from './HeaderComponent';
+import ProgramVersion from '../ProgramVersion';
 
 const LayoutComp = () => {
     return (
-        <Layout style={{ backgroundColor: 'transparent' }}>
-            <Header
-                style={{
-                    backgroundColor: 'transparent',
-                    height: '100px',
-                    marginTop: '40px',
-                    display: 'flex',
-                    alignItems: 'end',
-                    justifyContent: 'center',
-                }}>
-                <HeaderLogo />
-            </Header>
+        <Layout style={{ backgroundColor: 'transparent', height: '99.9vh' }}>
+            <HeaderComponent />
             <Content
                 style={{
-                    height: 'calc(100vh - 100px - 40px)',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
                 <Outlet />
             </Content>
+            <ProgramVersion />
         </Layout>
     );
 };

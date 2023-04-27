@@ -42,8 +42,8 @@ body::after {
 
 .adm {
     position: fixed;
-    right: 1vw;
-    bottom: 1vw;
+    right: 10px;
+    bottom: 10px;
     color: var( --clr-main-dark);
 
     height: 20px;
@@ -56,3 +56,9 @@ body::after {
 }
 
 
+.version{
+    color: white;
+    font-size: 12px;
+    font-weight: 100;
+    line-height: 12px;
+}
