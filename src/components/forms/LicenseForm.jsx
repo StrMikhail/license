@@ -174,6 +174,7 @@ const LicenseForm = ({ onSetStatus }) => {
                 <Select
                     mode="tags"
                     value={'string[]'}
+                    tokenSeparators={[' ', '/']}
                     maxTagTextLength={3}
                     maxTagCount={2}
                     optionFilterProp="value"

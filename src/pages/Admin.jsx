@@ -104,7 +104,7 @@ const Admin = () => {
                     <HeaderLogo />
                     <Space wrap={true}>
                         <Button type="primary" onClick={toogleModal}>
-                            Добавить нового пользователя
+                            Управление пользователями
                         </Button>
                         <Button type="primary" onClick={getFileCSV}>
                             Загрузить список в CSV

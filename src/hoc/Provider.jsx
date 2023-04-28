@@ -6,7 +6,7 @@ import ru_RU from 'antd/lib/locale/ru_RU';
 export const AdminProvider = React.createContext();
 
 const Provider = ({ children }) => {
-    const [admin, setAdmin] = useState(false);
+    const [admin, setAdmin] = useState(true);
 
     return (
         <AdminProvider.Provider value={{ admin, setAdmin }}>

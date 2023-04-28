@@ -10,7 +10,7 @@ export const result = {
         status: 'success',
         title: 'Пользователь успешно добавлен',
         text: '',
-        buttonText: 'Выйти',
+        buttonText: 'Вернуться',
     },
     400: {
         status: 'error',
