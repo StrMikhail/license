@@ -1,13 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Header } from 'antd/es/layout/layout';
-import { Button, Row } from 'antd';
+import { Row } from 'antd';
 import HeaderLogo from '../HeaderLogo';
-import ModalCheckLicense from '../ModalCheckLicense';
-import { useLocation } from 'react-router-dom';
 
 const HeaderComponent = () => {
-    const location = useLocation();
-
     return (
         <Header
             style={{

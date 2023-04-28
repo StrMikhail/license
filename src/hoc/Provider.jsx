@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { ConfigProvider } from 'antd';
 import { BrowserRouter } from 'react-router-dom';
 import ru_RU from 'antd/lib/locale/ru_RU';
@@ -6,7 +6,7 @@ import ru_RU from 'antd/lib/locale/ru_RU';
 export const AdminProvider = React.createContext();
 
 const Provider = ({ children }) => {
-    const [admin, setAdmin] = useState(true);
+    const [admin, setAdmin] = useState(false);
 
     return (
         <AdminProvider.Provider value={{ admin, setAdmin }}>

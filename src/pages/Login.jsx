@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, Typography } from 'antd';
+import { Card } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AdminProvider } from '../hoc/Provider';
@@ -8,18 +8,6 @@ const Login = () => {
     const navigate = useNavigate();
     const { setAdmin } = React.useContext(AdminProvider);
     const [error, setError] = useState([]);
-
-    const checkAdmin = async (data) => {
-        await fetch(process.env.REACT_APP_BACKEND_API, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json; application/csv',
-            },
-        })
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error));
-    };
 
     const handleSubmitForm = (values) => {
         if (values.login === 'admin' && values.password === 'P@ssw0rd') {

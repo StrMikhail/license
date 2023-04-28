@@ -5,7 +5,7 @@ import axios from 'axios';
 import RemoveUser from './removeUser/removeUser';
 import ResultCard from './ResultCard';
 
-const ModalComp = ({ open, handleClose, onSubmit }) => {
+const ModalComp = ({ open, handleClose }) => {
     const [users, setUsers] = useState();
     const [status, setStatus] = useState();
 
@@ -13,35 +13,32 @@ const ModalComp = ({ open, handleClose, onSubmit }) => {
         getUsers();
     }, []);
 
-    const addUser = async (user) => {
-        try {
-            const data = await axios.post(`${process.env.REACT_APP_BACKEND_API}/adm`, user);
-            if (data.status > 299) throw new Error(data.status);
-            setStatus(data.status);
-            setUsers((prev) => prev.push(user));
-        } catch (error) {
-            setStatus(typeof error.message === 'number' ? error.message : 404);
-        }
-    };
-
     const getUsers = async () => {
         try {
             const { data } = await axios.get(`${process.env.REACT_APP_BACKEND_API}/users`);
             setUsers(data);
         } catch (error) {
-            setStatus(typeof error.message === 'number' ? error.message : 404);
+            setStatus(error.response.status);
+        }
+    };
+
+    const addUser = async (user) => {
+        try {
+            const data = await axios.post(`${process.env.REACT_APP_BACKEND_API}/adm`, user);
+            if (data.status > 299) throw new Error(data.status);
+            setStatus(data.status);
+            getUsers();
+        } catch (error) {
+            setStatus(error.response.status);
         }
     };
 
     const removeUsers = async (usersList) => {
         try {
-            const { data } = await axios.post(
-                `${process.env.REACT_APP_BACKEND_API}/users`,
-                usersList,
-            );
-            setUsers((prev) => prev.filter((user) => !usersList.includes(user)));
+            await axios.post(`${process.env.REACT_APP_BACKEND_API}/users`, usersList);
+            getUsers();
         } catch (error) {
-            setStatus(typeof error.message === 'number' ? error.message : 404);
+            setStatus(error.response.status);
         }
     };
 

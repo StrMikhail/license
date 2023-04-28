@@ -18,6 +18,12 @@ export const result = {
         text: 'Произошла ошибка в отправке данных',
         buttonText: 'Выйти',
     },
+    401: {
+        status: 'error',
+        title: 'Пользователь уже существует',
+        text: '',
+        buttonText: 'Вернуться',
+    },
     403: {
         status: 'error',
         title: 'У Вас нет прав на генерацию лицензии',

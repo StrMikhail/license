@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TablePanel from '../components/TablePanel';
 import HeaderLogo from '../components/HeaderLogo';
-import { Button, Col, Layout, Row, Space } from 'antd';
+import { Button, Layout, Row, Space } from 'antd';
 import ModalComp from '../components/ModalComp';
 import { Content, Header } from 'antd/es/layout/layout';
 import { downloadFile } from '../utils/downloadFile';
